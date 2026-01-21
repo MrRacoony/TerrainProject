@@ -2,8 +2,8 @@ using UnityEngine;
 
 
 public class Terrain
-{
-    public Mesh Regenerate(Vector2Int vertexSize, Vector2 mapSize, bool mirrorGenerate)
+{   
+    public Mesh Regenerate(Vector2Int vertexSize, Vector2 mapSize, bool mirrorGenerate, Texture2D heightMap)
     {
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
@@ -24,7 +24,7 @@ public class Terrain
         {
             for (int x = 1; x <= vertexSize.x; x++)
             {
-                Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, 0, (y - vertexSize.y / 2f) * mapSize.y) / (Mathf.Max(vertexSize.x, vertexSize.y) - 1);
+                Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, heightMap.GetPixel(x, y).r * 10, (y - vertexSize.y / 2f) * mapSize.y) / (Mathf.Max(vertexSize.x, vertexSize.y) - 1);
                 verticies[vertexIndex] = vertexPos;
 
                 //Debug.Log(verticies[vertexIndex]);
@@ -77,5 +77,23 @@ public class Terrain
             triangles[triangleIndex + 4] = vertexIndex + vertexSize.x;
             triangles[triangleIndex + 5] = vertexIndex + vertexSize.x + 1;
         }
+    }
+
+    public Texture2D GenerateHeightMap(Vector2Int textureSize)
+    {
+        Texture2D heightMap = new Texture2D(textureSize.x, textureSize.y);
+        
+        for (int y = 0; y < textureSize.y; y++)
+        {
+            for (int x = 0; x < textureSize.x; x++)
+            {
+                float heightValue = Mathf.PerlinNoise((float)x / textureSize.x * 10f, (float)y / textureSize.y * 10f);
+                Color pixelColor = new Color(heightValue, heightValue, heightValue);
+                heightMap.SetPixel(x, y, pixelColor);
+            }
+        }
+        
+        heightMap.Apply();
+        return heightMap;
     }
 }

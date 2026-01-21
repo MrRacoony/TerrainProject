@@ -10,11 +10,14 @@ public class TerrainScript : MonoBehaviour
     [SerializeField] private Vector2 mapSize;
     [SerializeField] private bool mirrored;
 
+    [SerializeField] private Texture2D heightMap;
+
+
     public void Regenerate()
     {
         if (terrain == null) terrain = new Terrain();
-
-        Mesh mesh = terrain.Regenerate(vertexSize, mapSize, mirrored);
+        if (heightMap == null) heightMap = terrain.GenerateHeightMap(vertexSize);
+        Mesh mesh = terrain.Regenerate(vertexSize, mapSize, mirrored, heightMap);
         mesh.name = "TerrainMesh";
         GetComponent<MeshFilter>().mesh = mesh;
     }
