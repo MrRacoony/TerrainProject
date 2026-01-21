@@ -5,15 +5,17 @@ using UnityEngine;
 public class TerrainScript : MonoBehaviour
 {
     private Terrain terrain;
+
+    [SerializeField] private Vector2Int vertexSize;
     
-        public void Regenerate()
-        {
-            if (terrain == null) terrain = new Terrain();
-    
-            Mesh mesh = terrain.Regenerate();
-            mesh.name = "TerrainMesh";
-            GetComponent<MeshFilter>().mesh = mesh;
-        }
+    public void Regenerate()
+    {
+        if (terrain == null) terrain = new Terrain();
+
+        Mesh mesh = terrain.Regenerate(vertexSize);
+        mesh.name = "TerrainMesh";
+        GetComponent<MeshFilter>().mesh = mesh;
+    }
         
 
     
