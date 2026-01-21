@@ -24,7 +24,7 @@ public class Terrain
         {
             for (int x = 1; x <= vertexSize.x; x++)
             {
-                Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, 0, (y - vertexSize.y / 2f) * mapSize.y)/ Mathf.Max(vertexSize.x - 1, vertexSize.y - 1); ;
+                Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, 0, (y - vertexSize.y / 2f) * mapSize.y) / (Mathf.Max(vertexSize.x, vertexSize.y) - 1);
                 verticies[vertexIndex] = vertexPos;
 
                 //Debug.Log(verticies[vertexIndex]);
