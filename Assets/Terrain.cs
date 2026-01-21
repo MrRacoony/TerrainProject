@@ -6,7 +6,8 @@ public class Terrain
     public Mesh Regenerate(Vector2Int vertexSize)
     {
         Mesh mesh = new Mesh();
-        
+        mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+
         Vector3[] verticies = new Vector3[vertexSize.x * vertexSize.y];
         int[] triangles = new int[(vertexSize.x - 1) * (vertexSize.y - 1) * 6];
 
@@ -56,8 +57,8 @@ public class Terrain
         mesh.SetVertices(verticies);
         mesh.SetIndices(triangles, MeshTopology.Triangles, 0);
         
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
+        //mesh.RecalculateNormals();
+        //mesh.RecalculateBounds();
         
         return mesh;
     }
