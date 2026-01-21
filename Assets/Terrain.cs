@@ -23,7 +23,7 @@ public class Terrain
         {
             for (int x = 1; x <= vertexSize.x; x++)
             {
-                verticies[vertexIndex] = new Vector3(x, 0, y);
+                verticies[vertexIndex] = new Vector3(x - vertexSize.x / 2f, 0, y - vertexSize.y / 2f);
                 
                 //Debug.Log(verticies[vertexIndex]);
 
