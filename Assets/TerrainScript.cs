@@ -7,7 +7,7 @@ public class TerrainScript : MonoBehaviour
     private Terrain terrain;
 
     [SerializeField] private Vector2Int vertexSize;
-    [SerializeField] private Vector2 mapSize;
+    [SerializeField] private Vector2Int mapSize;
     [SerializeField] private bool mirrored;
 
     [SerializeField] private Texture2D heightMap;

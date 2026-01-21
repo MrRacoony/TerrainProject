@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Terrain
 {   
-    public Mesh Regenerate(Vector2Int vertexSize, Vector2 mapSize, bool mirrorGenerate, Texture2D heightMap)
+    public Mesh Regenerate(Vector2Int vertexSize, Vector2Int mapSize, bool mirrorGenerate, Texture2D heightMap)
     {
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
@@ -24,7 +24,8 @@ public class Terrain
         {
             for (int x = 1; x <= vertexSize.x; x++)
             {
-                Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, heightMap.GetPixel(x, y).r * 10, (y - vertexSize.y / 2f) * mapSize.y) / (Mathf.Max(vertexSize.x, vertexSize.y) - 1);
+                Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, heightMap.GetPixel(heightMap.width/x,heightMap.height/y).r * 10, (y - vertexSize.y / 2f) * mapSize.y) / (Mathf.Max(vertexSize.x, vertexSize.y) - 1);
+                Debug.Log(heightMap.GetPixel(heightMap.width/x,heightMap.height/y).r * 10);
                 verticies[vertexIndex] = vertexPos;
 
                 //Debug.Log(verticies[vertexIndex]);
