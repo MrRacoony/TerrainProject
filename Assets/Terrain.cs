@@ -34,14 +34,14 @@ public class Terrain
                     triangles[triangleIndex + 1] = vertexIndex + 1 + vertexSize.x;
                     triangles[triangleIndex + 2] = vertexIndex + 1;
                     
-                    Debug.Log($"{triangles[triangleIndex]} + {triangles[triangleIndex + 1]} + {triangles[triangleIndex + 2]}");
+                    // Debug.Log($"{triangles[triangleIndex]} + {triangles[triangleIndex + 1]} + {triangles[triangleIndex + 2]}");
                     
                     // Second triangle
                     triangles[triangleIndex + 3] = vertexIndex;
                     triangles[triangleIndex + 4] = vertexIndex + vertexSize.x;
                     triangles[triangleIndex + 5] = vertexIndex + vertexSize.x + 1;
 
-                    Debug.Log($"{triangles[triangleIndex + 3]} + {triangles[triangleIndex + 4]} + {triangles[triangleIndex + 5]}");
+                    // Debug.Log($"{triangles[triangleIndex + 3]} + {triangles[triangleIndex + 4]} + {triangles[triangleIndex + 5]}");
                     
                     triangleIndex += 6;
                 }
@@ -50,8 +50,8 @@ public class Terrain
             }
         }
 
-        Debug.Log(triangles.Length);
-        Debug.Log(verticies.Length);
+        // Debug.Log(triangles.Length);
+        // Debug.Log(verticies.Length);
         
         mesh.SetVertices(verticies);
         mesh.SetIndices(triangles, MeshTopology.Triangles, 0);
