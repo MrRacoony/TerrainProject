@@ -31,15 +31,15 @@ public class Terrain
                 {
                     // First triangle
                     triangles[triangleIndex] = vertexIndex;
-                    triangles[triangleIndex + 1] = vertexIndex + 1;
-                    triangles[triangleIndex + 2] = vertexIndex + 1 + vertexSize.x;
+                    triangles[triangleIndex + 1] = vertexIndex + 1 + vertexSize.x;
+                    triangles[triangleIndex + 2] = vertexIndex + 1;
                     
                     Debug.Log($"{triangles[triangleIndex]} + {triangles[triangleIndex + 1]} + {triangles[triangleIndex + 2]}");
                     
                     // Second triangle
                     triangles[triangleIndex + 3] = vertexIndex;
-                    triangles[triangleIndex + 4] = vertexIndex + vertexSize.x + 1;
-                    triangles[triangleIndex + 5] = vertexIndex + vertexSize.x;
+                    triangles[triangleIndex + 4] = vertexIndex + vertexSize.x;
+                    triangles[triangleIndex + 5] = vertexIndex + vertexSize.x + 1;
 
                     Debug.Log($"{triangles[triangleIndex + 3]} + {triangles[triangleIndex + 4]} + {triangles[triangleIndex + 5]}");
                     
