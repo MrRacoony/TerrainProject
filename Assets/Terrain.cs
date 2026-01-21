@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Terrain
 {
-    public Mesh Regenerate(Vector2Int vertexSize)
+    public Mesh Regenerate(Vector2Int vertexSize, Vector2 mapSize, bool mirrorGenerate)
     {
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
@@ -24,25 +24,37 @@ public class Terrain
         {
             for (int x = 1; x <= vertexSize.x; x++)
             {
-                verticies[vertexIndex] = new Vector3(x - vertexSize.x / 2f, 0, y - vertexSize.y / 2f);
-                
+                Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, 0, (y - vertexSize.y / 2f) * mapSize.y)/ Mathf.Max(vertexSize.x - 1, vertexSize.y - 1); ;
+                verticies[vertexIndex] = vertexPos;
+
                 //Debug.Log(verticies[vertexIndex]);
 
                 if (x != vertexSize.x && y != vertexSize.y)
                 {
-                    // First triangle
-                    triangles[triangleIndex] = vertexIndex;
-                    triangles[triangleIndex + 1] = vertexIndex + 1 + vertexSize.x;
-                    triangles[triangleIndex + 2] = vertexIndex + 1;
-                    
-                    // Debug.Log($"{triangles[triangleIndex]} + {triangles[triangleIndex + 1]} + {triangles[triangleIndex + 2]}");
-                    
-                    // Second triangle
-                    triangles[triangleIndex + 3] = vertexIndex;
-                    triangles[triangleIndex + 4] = vertexIndex + vertexSize.x;
-                    triangles[triangleIndex + 5] = vertexIndex + vertexSize.x + 1;
+                    if (mirrorGenerate)
+                    {
+                        // First triangle
+                        triangles[triangleIndex] = vertexIndex;
+                        triangles[triangleIndex + 1] = vertexIndex + vertexSize.x;
+                        triangles[triangleIndex + 2] = vertexIndex + 1;
 
-                    // Debug.Log($"{triangles[triangleIndex + 3]} + {triangles[triangleIndex + 4]} + {triangles[triangleIndex + 5]}");
+                        // Second triangle
+                        triangles[triangleIndex + 3] = vertexIndex + vertexSize.x;
+                        triangles[triangleIndex + 4] = vertexIndex + vertexSize.x + 1;
+                        triangles[triangleIndex + 5] = vertexIndex + 1;
+                    }
+                    else
+                    {
+                        // First triangle
+                        triangles[triangleIndex] = vertexIndex;
+                        triangles[triangleIndex + 1] = vertexIndex + 1 + vertexSize.x;
+                        triangles[triangleIndex + 2] = vertexIndex + 1;
+
+                        // Second triangle
+                        triangles[triangleIndex + 3] = vertexIndex;
+                        triangles[triangleIndex + 4] = vertexIndex + vertexSize.x;
+                        triangles[triangleIndex + 5] = vertexIndex + vertexSize.x + 1;
+                    }
                     
                     triangleIndex += 6;
                 }
