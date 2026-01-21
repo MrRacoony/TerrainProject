@@ -31,31 +31,7 @@ public class Terrain
 
                 if (x != vertexSize.x && y != vertexSize.y)
                 {
-                    if (mirrorGenerate)
-                    {
-                        // First triangle
-                        triangles[triangleIndex] = vertexIndex;
-                        triangles[triangleIndex + 1] = vertexIndex + vertexSize.x;
-                        triangles[triangleIndex + 2] = vertexIndex + 1;
-
-                        // Second triangle
-                        triangles[triangleIndex + 3] = vertexIndex + vertexSize.x;
-                        triangles[triangleIndex + 4] = vertexIndex + vertexSize.x + 1;
-                        triangles[triangleIndex + 5] = vertexIndex + 1;
-                    }
-                    else
-                    {
-                        // First triangle
-                        triangles[triangleIndex] = vertexIndex;
-                        triangles[triangleIndex + 1] = vertexIndex + 1 + vertexSize.x;
-                        triangles[triangleIndex + 2] = vertexIndex + 1;
-
-                        // Second triangle
-                        triangles[triangleIndex + 3] = vertexIndex;
-                        triangles[triangleIndex + 4] = vertexIndex + vertexSize.x;
-                        triangles[triangleIndex + 5] = vertexIndex + vertexSize.x + 1;
-                    }
-                    
+                    GenerateTriangles(mirrorGenerate, triangles, vertexIndex, triangleIndex, vertexSize);
                     triangleIndex += 6;
                 }
 
@@ -73,5 +49,33 @@ public class Terrain
         //mesh.RecalculateBounds();
         
         return mesh;
+    }
+
+    public void GenerateTriangles(bool mirrorGenerate, int[] triangles, int vertexIndex, int triangleIndex, Vector2Int vertexSize)
+    {
+        if (mirrorGenerate)
+        {
+            // First triangle
+            triangles[triangleIndex] = vertexIndex;
+            triangles[triangleIndex + 1] = vertexIndex + vertexSize.x;
+            triangles[triangleIndex + 2] = vertexIndex + 1;
+
+            // Second triangle
+            triangles[triangleIndex + 3] = vertexIndex + vertexSize.x;
+            triangles[triangleIndex + 4] = vertexIndex + vertexSize.x + 1;
+            triangles[triangleIndex + 5] = vertexIndex + 1;
+        }
+        else
+        {
+            // First triangle
+            triangles[triangleIndex] = vertexIndex;
+            triangles[triangleIndex + 1] = vertexIndex + 1 + vertexSize.x;
+            triangles[triangleIndex + 2] = vertexIndex + 1;
+
+            // Second triangle
+            triangles[triangleIndex + 3] = vertexIndex;
+            triangles[triangleIndex + 4] = vertexIndex + vertexSize.x;
+            triangles[triangleIndex + 5] = vertexIndex + vertexSize.x + 1;
+        }
     }
 }
