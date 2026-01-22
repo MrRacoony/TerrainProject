@@ -79,15 +79,16 @@ public class Terrain
         }
     }
 
-    public Texture2D GenerateHeightMap(Vector2Int textureSize)
+    public Texture2D GenerateHeightMap(Vector2Int textureSize, float terrainSize)
     {
         Texture2D heightMap = new Texture2D(textureSize.x, textureSize.y);
+        int randomSeed = Random.Range(-10000, 10000);
         
         for (int y = 0; y < textureSize.y; y++)
         {
             for (int x = 0; x < textureSize.x; x++)
             {
-                float heightValue = Mathf.PerlinNoise((float)x / textureSize.x * 10f, (float)y / textureSize.y * 10f);
+                float heightValue = Mathf.PerlinNoise(((float)x + randomSeed)/ textureSize.x * terrainSize, ((float)y + randomSeed)/ textureSize.y * terrainSize);
                 Color pixelColor = new Color(heightValue, heightValue, heightValue);
                 heightMap.SetPixel(x, y, pixelColor);
             }
