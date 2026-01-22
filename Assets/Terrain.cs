@@ -2,14 +2,21 @@ using UnityEngine;
 
 
 public class Terrain
-{   
-    public Mesh Regenerate(Vector2Int vertexSize, Vector2Int mapSize, bool mirrorGenerate, Texture2D heightMap)
+{
+
+
+    public Terrain() {
+
+    }
+
+    public Mesh Regenerate(Vector2Int vertexSize, Vector2Int mapSize, bool mirrorGenerate, float textureSize, Texture2D heightMap,float maxHeight)
     {
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
         Vector3[] verticies = new Vector3[vertexSize.x * vertexSize.y];
         Color[] colors = new Color[verticies.Length];
+        Vector2[] uvs = new Vector2[verticies.Length];
         int[] triangles = new int[(vertexSize.x - 1) * (vertexSize.y - 1) * 6];
         
 
@@ -26,9 +33,12 @@ public class Terrain
         {
             for (int x = 1; x <= vertexSize.x; x++)
             {
-                Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, heightMap.GetPixel((heightMap.width/vertexSize.x) * x, (heightMap.height / vertexSize.y) * y).r * 10, (y - vertexSize.y / 2f) * mapSize.y);
+                float vertexHeight = heightMap.GetPixel((heightMap.width / vertexSize.x) * x, (heightMap.height / vertexSize.y) * y).r;
+                Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, vertexHeight * maxHeight, (y - vertexSize.y / 2f) * mapSize.y);
                 verticies[vertexIndex] = vertexPos;
-                colors[vertexIndex] = Color.black;
+                colors[vertexIndex] = GetColorAtHeight(vertexHeight);
+
+                uvs[vertexIndex] = new Vector2((x / (float)vertexSize.x) * textureSize, (y / (float)vertexSize.y) * textureSize);
 
                 //Debug.Log(verticies[vertexIndex]);
 
@@ -47,6 +57,7 @@ public class Terrain
         
         mesh.SetVertices(verticies);
         mesh.SetIndices(triangles, MeshTopology.Triangles, 0);
+        mesh.SetUVs(0, uvs);
         
         //mesh.RecalculateNormals();
         //mesh.RecalculateBounds();
@@ -55,7 +66,7 @@ public class Terrain
         return mesh;
     }
 
-    public void GenerateTriangles(bool mirrorGenerate, int[] triangles, int vertexIndex, int triangleIndex, Vector2Int vertexSize)
+    private void GenerateTriangles(bool mirrorGenerate, int[] triangles, int vertexIndex, int triangleIndex, Vector2Int vertexSize)
     {
         if (mirrorGenerate)
         {
@@ -81,6 +92,16 @@ public class Terrain
             triangles[triangleIndex + 4] = vertexIndex + vertexSize.x;
             triangles[triangleIndex + 5] = vertexIndex + vertexSize.x + 1;
         }
+    }
+
+    private Color GetColorAtHeight(float vertexHeight) {
+        if(vertexHeight <= 0.3f) {
+            return Color.red;
+        } else if (vertexHeight <= 0.7f) {
+            return Color.yellow;
+        }
+
+        return Color.green;
     }
 
     public Texture2D GenerateHeightMap(Vector2Int textureSize, float terrainSize)
