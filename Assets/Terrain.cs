@@ -24,8 +24,7 @@ public class Terrain
         {
             for (int x = 1; x <= vertexSize.x; x++)
             {
-                Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, heightMap.GetPixel(heightMap.width/x,heightMap.height/y).r, (y - vertexSize.y / 2f) * mapSize.y);
-                Debug.Log(heightMap.width/x + " : " + heightMap.height/y);
+                Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, heightMap.GetPixel((heightMap.width/vertexSize.x) * x, (heightMap.height / vertexSize.y) * y).r * 10, (y - vertexSize.y / 2f) * mapSize.y);
                 verticies[vertexIndex] = vertexPos;
 
                 //Debug.Log(verticies[vertexIndex]);
