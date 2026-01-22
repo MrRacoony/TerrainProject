@@ -9,7 +9,9 @@ public class Terrain
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
         Vector3[] verticies = new Vector3[vertexSize.x * vertexSize.y];
+        Color[] colors = new Color[verticies.Length];
         int[] triangles = new int[(vertexSize.x - 1) * (vertexSize.y - 1) * 6];
+        
 
         int vertexIndex = 0;
         int triangleIndex = 0;
@@ -26,6 +28,7 @@ public class Terrain
             {
                 Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, heightMap.GetPixel((heightMap.width/vertexSize.x) * x, (heightMap.height / vertexSize.y) * y).r * 10, (y - vertexSize.y / 2f) * mapSize.y);
                 verticies[vertexIndex] = vertexPos;
+                colors[vertexIndex] = Color.black;
 
                 //Debug.Log(verticies[vertexIndex]);
 
@@ -48,6 +51,7 @@ public class Terrain
         //mesh.RecalculateNormals();
         //mesh.RecalculateBounds();
         
+        mesh.colors = colors;
         return mesh;
     }
 
