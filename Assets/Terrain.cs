@@ -3,10 +3,19 @@ using UnityEngine;
 
 public class Terrain
 {
+    Color bottomColor;
+    Color middleColor;
+    Color topColor;
 
+    float middleColorCutOff;
+    float topColorCutOff;
 
-    public Terrain() {
-
+    public Terrain(Color bc, Color mc, Color tc, float mcco, float tcco) {
+        bottomColor = bc;
+        middleColor = mc;
+        topColor = tc;
+        middleColorCutOff = mcco;
+        topColorCutOff = tcco;
     }
 
     public Mesh Regenerate(Vector2Int vertexSize, Vector2Int mapSize, bool mirrorGenerate, float textureSize, Texture2D heightMap,float maxHeight)
@@ -59,7 +68,7 @@ public class Terrain
         mesh.SetIndices(triangles, MeshTopology.Triangles, 0);
         mesh.SetUVs(0, uvs);
         
-        //mesh.RecalculateNormals();
+        mesh.RecalculateNormals();
         //mesh.RecalculateBounds();
         
         mesh.colors = colors;
@@ -95,13 +104,13 @@ public class Terrain
     }
 
     private Color GetColorAtHeight(float vertexHeight) {
-        if(vertexHeight <= 0.3f) {
-            return Color.red;
-        } else if (vertexHeight <= 0.7f) {
-            return Color.yellow;
+        if(vertexHeight <= middleColorCutOff) {
+            return bottomColor;
+        } else if (vertexHeight <= topColorCutOff) {
+            return middleColor;
         }
 
-        return Color.green;
+        return topColor;
     }
 
     public Texture2D GenerateHeightMap(Vector2Int textureSize, float terrainSize)

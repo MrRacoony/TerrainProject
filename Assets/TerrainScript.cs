@@ -22,9 +22,17 @@ public class TerrainScript : MonoBehaviour
     [SerializeField] private Texture texture;
     [SerializeField] private float textureSize;
 
+    [Space]
+
+    [SerializeField] private Color bottomColor;
+    [SerializeField] private Color middleColor;
+    [SerializeField] private Color topColor;
+
+    [SerializeField] private float middleColorCutOff, topColorCutOff;
+
     public void Regenerate()
     {
-        if (terrain == null) terrain = new Terrain();
+        terrain = new Terrain(bottomColor, middleColor, topColor, middleColorCutOff, topColorCutOff);
         if (randomMap) heightMap = terrain.GenerateHeightMap(vertexSize, terrainSize);
         Mesh mesh = terrain.Regenerate(vertexSize, mapSize, mirrored, textureSize, heightMap, maxHeight);
         mesh.name = "TerrainMesh";
