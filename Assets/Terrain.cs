@@ -18,7 +18,7 @@ public class Terrain
         topColorCutOff = tcco;
     }
 
-    public Mesh Regenerate(Vector2Int vertexSize, Vector2Int mapSize, bool mirrorGenerate, float textureSize, Texture2D heightMap,float maxHeight)
+    public Mesh Regenerate(Vector2Int vertexSize, Vector2Int mapSize, bool mirrorGenerate, float textureSize, Texture2D heightMap,float maxHeight, bool island, Vector2Int islandCenter, float islandCurve)
     {
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
@@ -31,6 +31,8 @@ public class Terrain
 
         int vertexIndex = 0;
         int triangleIndex = 0;
+
+
         
         if (triangles.Length <= 0)
         {
@@ -43,6 +45,28 @@ public class Terrain
             for (int x = 1; x <= vertexSize.x; x++)
             {
                 float vertexHeight = heightMap.GetPixel((heightMap.width / vertexSize.x) * x, (heightMap.height / vertexSize.y) * y).r;
+
+                if (island && !Vector2.Equals(new Vector2(x,y), islandCenter)) {
+                    float distance = Vector2.Distance(new Vector2(x, y), islandCenter);
+
+                    if(distance != 0) {
+                        //float islandValue = Mathf.SmoothStep(0, maxHeight, Mathf.Sqrt(distance)/distance);
+                        //float islandValue = Mathf.SmoothStep(0, maxHeight, -Mathf.Pow(distance,2) + islandCurve);
+
+                        //float islandValue = Mathf.SmoothStep(0, maxHeight, -distance + Mathf.Sqrt(distance));
+
+                        //float islandValue = (-Mathf.Pow(distance, 2) / (Mathf.Sqrt(distance) + islandCurve)) + maxHeight;
+
+                        //float islandValue = Mathf.SmoothStep(0, maxHeight, islandCurve - distance / islandCurve);
+
+                        float islandValue = (-distance * (distance / (Mathf.Sqrt(distance) + islandCurve)) + maxHeight) / maxHeight;
+
+                        islandValue = Mathf.Clamp01(islandValue);
+
+                        vertexHeight *= islandValue;
+                    }
+                }
+
                 Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, vertexHeight * maxHeight, (y - vertexSize.y / 2f) * mapSize.y);
                 verticies[vertexIndex] = vertexPos;
                 colors[vertexIndex] = GetColorAtHeight(vertexHeight);
@@ -50,6 +74,8 @@ public class Terrain
                 uvs[vertexIndex] = new Vector2((x / (float)vertexSize.x) * textureSize, (y / (float)vertexSize.y) * textureSize);
 
                 //Debug.Log(verticies[vertexIndex]);
+
+
 
                 if (x != vertexSize.x && y != vertexSize.y)
                 {

@@ -30,11 +30,17 @@ public class TerrainScript : MonoBehaviour
 
     [SerializeField] private float middleColorCutOff, topColorCutOff;
 
+    [Space]
+
+    [SerializeField] private bool island;
+    [SerializeField] private Vector2Int islandCenter;
+    [SerializeField] private float islandCurve;
+
     public void Regenerate()
     {
         terrain = new Terrain(bottomColor, middleColor, topColor, middleColorCutOff, topColorCutOff);
         if (randomMap) heightMap = terrain.GenerateHeightMap(vertexSize, terrainSize);
-        Mesh mesh = terrain.Regenerate(vertexSize, mapSize, mirrored, textureSize, heightMap, maxHeight);
+        Mesh mesh = terrain.Regenerate(vertexSize, mapSize, mirrored, textureSize, heightMap, maxHeight, island, islandCenter, islandCurve);
         mesh.name = "TerrainMesh";
         GetComponent<MeshFilter>().mesh = mesh;
         GetComponent<MeshRenderer>().sharedMaterial.mainTexture = texture;
