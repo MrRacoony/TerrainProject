@@ -49,22 +49,11 @@ public class Terrain
                 if (island && !Vector2.Equals(new Vector2(x,y), islandCenter)) {
                     float distance = Vector2.Distance(new Vector2(x, y), islandCenter);
 
-                    if(distance != 0) {
-                        //float islandValue = Mathf.SmoothStep(0, maxHeight, Mathf.Sqrt(distance)/distance);
-                        //float islandValue = Mathf.SmoothStep(0, maxHeight, -Mathf.Pow(distance,2) + islandCurve);
+                    float islandValue = (-distance * (distance / (Mathf.Sqrt(distance) + islandCurve)) + maxHeight) / maxHeight;
 
-                        //float islandValue = Mathf.SmoothStep(0, maxHeight, -distance + Mathf.Sqrt(distance));
+                    islandValue = Mathf.Clamp01(islandValue);
 
-                        //float islandValue = (-Mathf.Pow(distance, 2) / (Mathf.Sqrt(distance) + islandCurve)) + maxHeight;
-
-                        //float islandValue = Mathf.SmoothStep(0, maxHeight, islandCurve - distance / islandCurve);
-
-                        float islandValue = (-distance * (distance / (Mathf.Sqrt(distance) + islandCurve)) + maxHeight) / maxHeight;
-
-                        islandValue = Mathf.Clamp01(islandValue);
-
-                        vertexHeight *= islandValue;
-                    }
+                    vertexHeight *= islandValue;
                 }
 
                 Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, vertexHeight * maxHeight, (y - vertexSize.y / 2f) * mapSize.y);
@@ -72,9 +61,6 @@ public class Terrain
                 colors[vertexIndex] = GetColorAtHeight(vertexHeight);
 
                 uvs[vertexIndex] = new Vector2((x / (float)vertexSize.x) * textureSize, (y / (float)vertexSize.y) * textureSize);
-
-                //Debug.Log(verticies[vertexIndex]);
-
 
 
                 if (x != vertexSize.x && y != vertexSize.y)
@@ -87,15 +73,12 @@ public class Terrain
             }
         }
 
-        // Debug.Log(triangles.Length);
-        // Debug.Log(verticies.Length);
         
         mesh.SetVertices(verticies);
         mesh.SetIndices(triangles, MeshTopology.Triangles, 0);
         mesh.SetUVs(0, uvs);
         
         mesh.RecalculateNormals();
-        //mesh.RecalculateBounds();
         
         mesh.colors = colors;
         return mesh;
