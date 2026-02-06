@@ -39,15 +39,17 @@ public class Terrain
             Debug.LogError("Vertex size too small");
             return null;
         }
+        
         for (int y = 1; y <= vertexSize.y; y++)
         {
             for (int x = 1; x <= vertexSize.x; x++)
             {
                 float vertexHeight = heightMap.GetPixel((heightMap.width / vertexSize.x) * x, (heightMap.height / vertexSize.y) * y).r;
-                
 
                 if (island && !Vector2.Equals(new Vector2(x,y), islandCenter)) {
                     float distance = Vector2.Distance(new Vector2(x, y), islandCenter);
+
+                    if(distance != 0) {
                         //float islandValue = Mathf.SmoothStep(0, maxHeight, Mathf.Sqrt(distance)/distance);
                         //float islandValue = Mathf.SmoothStep(0, maxHeight, -Mathf.Pow(distance,2) + islandCurve);
 
@@ -61,7 +63,10 @@ public class Terrain
 
                         islandValue = Mathf.Clamp01(islandValue);
 
+                        vertexHeight *= islandValue;
+                    }
                 }
+
                 Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, vertexHeight * maxHeight, (y - vertexSize.y / 2f) * mapSize.y);
                 verticies[vertexIndex] = vertexPos;
                 colors[vertexIndex] = GetColorAtHeight(vertexHeight);
@@ -134,7 +139,7 @@ public class Terrain
         return topColor;
     }
 
-    public Texture2D GenerateHeightMap(Vector2Int textureSize, float terrainSize, bool island, Vector2Int islandCenter, float islandCurve)
+    public Texture2D GenerateHeightMap(Vector2Int textureSize, float terrainSize)
     {
         Texture2D heightMap = new Texture2D(textureSize.x, textureSize.y);
         int randomSeed = Random.Range(-10000, 10000);
@@ -145,20 +150,10 @@ public class Terrain
             {
                 float heightValue = Mathf.PerlinNoise(((float)x + randomSeed)/ textureSize.x * terrainSize, ((float)y + randomSeed)/ textureSize.y * terrainSize);
                 Color pixelColor = new Color(heightValue, heightValue, heightValue);
-                if (island)
-                {
-                    float distance = Vector2.Distance(new Vector2(x, y), islandCenter);
-
-                    float islandValue = -distance * (distance / (Mathf.Sqrt(distance) + islandCurve)) + 1;
-                    islandValue = Mathf.Clamp01(islandValue);
-                    heightMap.SetPixel(x, y, pixelColor * islandValue);
-                }
-                else
-                {
-                    heightMap.SetPixel(x, y, pixelColor);
-                }
+                heightMap.SetPixel(x, y, pixelColor);
             }
         }
+        
         heightMap.Apply();
         return heightMap;
     }
