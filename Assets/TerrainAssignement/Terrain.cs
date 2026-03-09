@@ -40,13 +40,13 @@ public class Terrain
             return null;
         }
         
-        for (int y = 1; y <= vertexSize.y; y++)
+        for (int y = 0; y < vertexSize.y; y++)
         {
-            for (int x = 1; x <= vertexSize.x; x++)
+            for (int x = 0; x < vertexSize.x; x++)
             {
-                float vertexHeight = heightMap.GetPixel((heightMap.width / vertexSize.x) * x, (heightMap.height / vertexSize.y) * y).r;
+                float vertexHeight = heightMap.GetPixel(Mathf.RoundToInt(((float)heightMap.width / (float)vertexSize.x) * x), Mathf.RoundToInt(((float)heightMap.height / (float)vertexSize.y) * y)).r;
 
-                if (island && !Vector2.Equals(new Vector2(x,y), islandCenter)) {
+                if (island && !Vector2.Equals(new Vector2(x,y), islandCenter) && maxHeight != 0) {
                     float distance = Vector2.Distance(new Vector2(x, y), islandCenter);
 
                     float islandValue = (-distance * (distance / (Mathf.Sqrt(distance) + islandCurve)) + maxHeight) / maxHeight;
@@ -56,14 +56,19 @@ public class Terrain
                     vertexHeight *= islandValue;
                 }
 
-                Vector3 vertexPos = new Vector3((x - vertexSize.x / 2f) * mapSize.x, vertexHeight * maxHeight, (y - vertexSize.y / 2f) * mapSize.y);
+
+                Vector3 vertexPos = new Vector3((x / ((float)vertexSize.x - 1)) * mapSize.x - mapSize.x / 2f, vertexHeight * maxHeight, (y / ((float)vertexSize.y - 1)) * mapSize.y - mapSize.y / 2f);
+                //Vector3 vertexPos = new Vector3((x - (vertexSize.x / 2f)) * mapSize.x, vertexHeight * maxHeight, (y - (vertexSize.y / 2f)) * mapSize.y);
+                //Vector3 vertexPos = new Vector3(((vertexSize.x - 1 / -2f) + x) / (vertexSize.x / mapSize.x), vertexHeight * maxHeight, ((vertexSize.y - 1 / 2f) + y) / (vertexSize.y / mapSize.y));
+
+                Debug.Log(vertexPos);
                 verticies[vertexIndex] = vertexPos;
                 colors[vertexIndex] = GetColorAtHeight(vertexHeight);
 
                 uvs[vertexIndex] = new Vector2((x / (float)vertexSize.x) * textureSize, (y / (float)vertexSize.y) * textureSize);
 
 
-                if (x != vertexSize.x && y != vertexSize.y)
+                if (x != vertexSize.x - 1 && y != vertexSize.y - 1)
                 {
                     GenerateTriangles(mirrorGenerate, triangles, vertexIndex, triangleIndex, vertexSize);
                     triangleIndex += 6;
