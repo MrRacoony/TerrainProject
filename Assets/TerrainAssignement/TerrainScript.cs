@@ -13,7 +13,7 @@ public class TerrainScript : MonoBehaviour
 
     [Space]
 
-    [SerializeField] private bool randomMap;
+    [SerializeField] private bool proceduralMap;
     [SerializeField] private float terrainSize;
     [SerializeField] private Texture2D heightMap;
 
@@ -39,7 +39,7 @@ public class TerrainScript : MonoBehaviour
     public void Regenerate()
     {
         terrain = new Terrain(bottomColor, middleColor, topColor, middleColorCutOff, topColorCutOff);
-        if (randomMap) heightMap = terrain.GenerateHeightMap(vertexSize, terrainSize);
+        if (proceduralMap) heightMap = terrain.GenerateHeightMap(vertexSize, terrainSize);
         Mesh mesh = terrain.Regenerate(vertexSize, mapSize, mirrored, textureSize, heightMap, maxHeight, island, islandCenter, islandCurve);
         mesh.name = "TerrainMesh";
         GetComponent<MeshFilter>().mesh = mesh;
